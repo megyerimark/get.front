@@ -1,24 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component , OnInit} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Booking } from '../services/booking';
+import { Booking } from '../../services/booking';
 
 @Component({
-  selector: 'app-booking-component',
+  selector: 'app-book',
   imports: [CommonModule, FormsModule],
-  templateUrl: './booking-component.html',
-  styleUrl: './booking-component.scss',
+  templateUrl: './book.html',
+  styleUrl: './book.scss',
 })
-export class BookingComponent  implements OnInit{
+export class Book implements OnInit{
   calendar: any = null;
   selectedSlot: any = null;
-  guest = { guest_name: '', guest_phone: '' };
+  guest = { guest_name: '', guest_phone: '', guest_email: '' };
   successMessage = '';
+
   constructor(
     private route: ActivatedRoute,
-    private bookingService: Booking) {}
-    ngOnInit() {
+    private bookingService: Booking
+  ) {}
+  ngOnInit() {
     // Kiolvassuk az ID-t az URL-ből (pl. localhost:4200/book/1 -> ID lesz az 1)
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -44,20 +46,19 @@ export class BookingComponent  implements OnInit{
     const payload = {
       availability_id: this.selectedSlot.id,
       guest_name: this.guest.guest_name,
-      guest_phone: this.guest.guest_phone
+      guest_phone: this.guest.guest_phone,
+      guest_email: this.guest.guest_email
     };
 
     this.bookingService.submitBooking(payload).subscribe({
       next: (res: any) => {
         this.successMessage = 'Sikeres foglalás! Az ingatlanos hamarosan keresni fog.';
         this.selectedSlot = null; 
-        this.guest = { guest_name: '', guest_phone: '' }; // Kiürítjük a formot
+        this.guest = { guest_name: '', guest_phone: '' , guest_email: ''}; // Kiürítjük a formot
         this.loadCalendar(this.calendar.id); // Frissítjük a naptárat, hogy eltűnjön a lefoglalt időpont
       },
       error: (err) => console.error('Hiba a foglalásnál:', err)
     });
-    
   }
-
 
 }

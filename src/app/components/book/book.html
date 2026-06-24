@@ -4,7 +4,8 @@
     
     @if (!calendar) {
       <p style="text-align: center; color: #666;">Naptár betöltése folyamatban...</p>
-    } @else {
+    } 
+    @else {
       <div style="text-align: center; margin-bottom: 30px;">
         <h1 style="color: #17a2b8; margin: 0 0 10px 0;">Időpontfoglalás</h1>
         <h2 style="margin: 0; color: #333; font-size: 20px;">{{ calendar.title }}</h2>
@@ -38,7 +39,9 @@
       @if (selectedSlot) {
         <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef;">
           <h3 style="margin-top: 0; color: #17a2b8;">Adatok megadása</h3>
-          <p style="margin-bottom: 20px; font-size: 14px; color: #666;">Kiválasztott időpont: <strong>{{ selectedSlot.slot_time | date:'yyyy. MM. dd. HH:mm' }}</strong></p>
+          <p style="margin-bottom: 20px; font-size: 14px; color: #666;">
+            Kiválasztott időpont: <strong>{{ selectedSlot.slot_time | date:'yyyy. MM. dd. HH:mm' }}</strong>
+          </p>
           
           <form (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 15px;">
             <div>
@@ -50,6 +53,12 @@
             <div>
               <label style="display: block; margin-bottom: 5px; font-weight: bold;">Telefonszámod</label>
               <input type="tel" [(ngModel)]="guest.guest_phone" name="guest_phone" required
+                     style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box;">
+            </div>
+
+            <div>
+              <label style="display: block; margin-bottom: 5px; font-weight: bold;">Email címed (ide jön a QR kód)</label>
+              <input type="email" [(ngModel)]="guest.guest_email" name="guest_email" required
                      style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box;">
             </div>
 

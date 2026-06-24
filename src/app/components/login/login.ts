@@ -36,8 +36,7 @@ export class Login {
         }
       },
       error: (err) => {
-        this.errorMessage = 'Hibás email vagy jelszó!';
-        console.error(err);
+        this.toastr.error("Sikertelen belépés")
       }
     });
 

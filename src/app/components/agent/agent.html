@@ -1,1 +1,94 @@
-<p>agent works!</p>
+<div style="min-height: 100vh; background-color: #121212; color: white; padding: 20px;">
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto 30px auto;">
+    <h1 style="color: #17a2b8; margin: 0;">Ingatlanos Vezérlőpult</h1>
+    <button (click)="logout()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+      Kijelentkezés
+    </button>
+  </div>
+
+  <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px;">
+    
+    <div style="background: #1e1e1e; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+      <h2 style="margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px;">Új foglalási link generálása</h2>
+      
+      <form (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 15px;">
+        <div>
+          <label style="display: block; margin-bottom: 5px;">Ingatlan neve (pl. Corvin 2 szoba)</label>
+          <input type="text" [(ngModel)]="newCalendar.title" name="title" required
+                 style="width: 100%; padding: 12px; border-radius: 4px; border: none; background: #333; color: white; box-sizing: border-box;">
+        </div>
+        
+        <div>
+          <label style="display: block; margin-bottom: 5px;">Ingatlan.com hirdetés linkje (opcionális)</label>
+          <input type="url" [(ngModel)]="newCalendar.external_url" name="external_url"
+                 style="width: 100%; padding: 12px; border-radius: 4px; border: none; background: #333; color: white; box-sizing: border-box;">
+        </div>
+
+        <button type="submit" style="padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px;">
+          Naptár létrehozása
+        </button>
+      </form>
+    </div>
+
+    <div style="background: #1e1e1e; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+      <h2 style="margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px;">Saját Naptáraim</h2>
+      
+      @if (calendars.length === 0) {
+        <p style="color: #888; text-align: center; padding: 20px 0;">Még nem hoztál létre egyetlen naptárat sem.</p>
+      }
+
+      @for (calendar of calendars; track calendar.id) {
+          <div style="background: #2a2a2a; padding: 20px; border-radius: 6px; border-left: 4px solid #17a2b8; margin-bottom: 15px;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <h3 style="margin: 0 0 5px 0;">{{ calendar.title }}</h3>
+                @if (calendar.external_url) {
+                  <a [href]="calendar.external_url" target="_blank" style="color: #17a2b8; text-decoration: none; font-size: 14px;">Hirdetés linkje</a>
+                }
+              </div>
+              <div style="background: #17a2b8; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+                Naptár ID: {{ calendar.id }}
+              </div>
+            </div>
+
+            <hr style="border-color: #444; margin: 15px 0;">
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-size: 14px;">Új szabad időpont megadása:</label>
+              <div style="display: flex; gap: 10px;">
+                <input type="datetime-local" #slotInput 
+                       style="flex: 1; padding: 10px; border-radius: 4px; border: none; background: #333; color: white;">
+                
+                <button (click)="addSlot(calendar, slotInput.value); slotInput.value = ''" 
+                        style="padding: 10px 15px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                  Hozzáadás
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #aaa;">Rögzített időpontok:</h4>
+              
+              @if (!calendar.availabilities || calendar.availabilities.length === 0) {
+                <span style="font-size: 13px; color: #777;">Még nincs megadva szabad időpont.</span>
+              }
+
+              <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                @for (slot of calendar.availabilities; track slot.id) {
+                  <div [style.background]="slot.is_booked ? '#dc3545' : '#1e7e34'" 
+                       style="padding: 8px 12px; border-radius: 4px; font-size: 13px;">
+                    {{ slot.slot_time | date:'yyyy. MM. dd. HH:mm' }} 
+                    <strong>{{ slot.is_booked ? '(Foglalt)' : '(Szabad)' }}</strong>
+                  </div>
+                }
+              </div>
+            </div>
+
+          </div>
+        }
+    </div>
+
+  </div>
+</div>

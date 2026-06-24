@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
+import { inject } from '@angular/core'
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +12,9 @@ import { Router } from '@angular/router';
   styleUrl: './login.scss',
 })
 export class Login {
+  private toastr = inject(ToastrService);
+  
+
 
   credentials = {email: '', password : ''};
   errorMessage = "";
@@ -17,15 +22,15 @@ export class Login {
   constructor(private authService: Auth, private router: Router) {}
 
   onSubmit() {
-    console.log('Ezt próbálja elküldeni az Angular:', this.credentials);
     this.authService.login(this.credentials).subscribe({
       next: (res: any) => {
         // 1. Token elmentése
         localStorage.setItem('auth_token', res.token);
-        
-        // 2. KÖZLEKEDÉSI RENDŐR: Szerepkör alapján navigálunk
+        this.toastr.success('Sikeres belépés')
+       
         if (res.user.role === 'admin') {
           this.router.navigate(['/admin']);
+        
         } else if (res.user.role === 'agent') {
           this.router.navigate(['/agent']);
         }

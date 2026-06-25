@@ -24,5 +24,8 @@ export class Calendar {
   addAvailability(calendarId: number, data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/calendars/${calendarId}/availabilities`, data, { headers: this.getHeaders() });
   }
+  verifyQrCode(bookingId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/bookings/verify`, { booking_id: bookingId }, { headers: this.getHeaders() });
+  }
   
 }

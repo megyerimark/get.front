@@ -6,6 +6,30 @@
       Kijelentkezés
     </button>
   </div>
+  <div style="background: #1e1e1e; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px;">
+        <h2 style="margin: 0;">🎟️ Jegy érvényesítése</h2>
+        <button (click)="toggleScanner()" 
+                [style.background]="scannerEnabled ? '#dc3545' : '#17a2b8'"
+                style="color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+          {{ scannerEnabled ? 'Kamera kikapcsolása' : 'Kamera bekapcsolása' }}
+        </button>
+      </div>
+
+      @if (scannerEnabled) {
+        <div style="border: 3px dashed #17a2b8; border-radius: 8px; overflow: hidden; max-width: 400px; margin: 0 auto;">
+          <zxing-scanner (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+        </div>
+        <p style="text-align: center; color: #aaa; margin-top: 10px;">Irányítsd a kamerát a vendég QR-kódjára!</p>
+      }
+
+      @if (scanMessage) {
+        <div [style.background]="scanStatus === 'success' ? '#1e7e34' : '#dc3545'" 
+             style="color: white; padding: 15px; border-radius: 6px; margin-top: 20px; text-align: center; font-weight: bold; font-size: 18px;">
+          {{ scanMessage }}
+        </div>
+      }
+    </div>
 
   <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px;">
     

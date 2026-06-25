@@ -3,6 +3,8 @@ import { Login } from './components/login/login';
 import { Admin } from './components/admin/admin';
 import { Agent } from './components/agent/agent';
 import { Book } from './components/book/book';
+import { VerifyBooking } from './pages/verify-booking/verify-booking';
+import { Register } from './register/register';
 
 
 export const routes: Routes = [
@@ -11,4 +13,6 @@ export const routes: Routes = [
     { path: 'admin', component: Admin },
     { path: 'agent', component: Agent },
     { path: 'book/:id', component: Book },
+    { path: 'verify-booking', component: VerifyBooking },
+    { path: 'register', component: Register },
 ];

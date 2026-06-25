@@ -1,0 +1,45 @@
+<div style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #f8f9fa;">
+  
+  <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px;">
+    
+    <h2 style="text-align: center; color: #17a2b8; margin-bottom: 30px; margin-top: 0;">Fiók létrehozása</h2>
+    
+    <form (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 20px;">
+      
+      <div>
+        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Teljes név</label>
+        <input type="text" [(ngModel)]="user.name" name="name" required placeholder="Pl. Kiss Péter"
+               style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px;">
+      </div>
+
+      <div>
+        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Email cím</label>
+        <input type="email" [(ngModel)]="user.email" name="email" required placeholder="peter@ingatlan.hu"
+               style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px;">
+      </div>
+
+      <div>
+        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Jelszó (min. 8 karakter)</label>
+        <input type="password" [(ngModel)]="user.password" name="password" required
+               style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px;">
+      </div>
+
+      <div>
+        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Jelszó újra</label>
+        <input type="password" [(ngModel)]="user.password_confirmation" name="password_confirmation" required
+               style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px;">
+      </div>
+
+      <button type="submit" style="padding: 15px; background: #17a2b8; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; transition: background 0.2s;">
+        Regisztráció
+      </button>
+
+    </form>
+
+    <div style="text-align: center; margin-top: 25px; font-size: 14px; color: #666;">
+      Már van fiókod? 
+      <a routerLink="/login" style="color: #17a2b8; text-decoration: none; font-weight: bold;">Jelentkezz be!</a>
+    </div>
+
+  </div>
+</div>

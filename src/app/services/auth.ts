@@ -10,6 +10,10 @@ export class Auth {
 
   constructor(private http: HttpClient) {}
 
+  register(credentials: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, credentials);
+  }
+
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials);
   }
@@ -21,4 +25,5 @@ export class Auth {
   getToken() {
     return localStorage.getItem('auth_token');
   }
+  
 }

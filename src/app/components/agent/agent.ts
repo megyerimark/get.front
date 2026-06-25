@@ -6,9 +6,11 @@ import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { BarcodeFormat } from '@zxing/library';
 
 @Component({
   selector: 'app-agent',
+  standalone: true,
   imports: [FormsModule, CommonModule, ZXingScannerModule],
   templateUrl: './agent.html',
   styleUrl: './agent.scss',
@@ -16,11 +18,13 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 export class Agent implements OnInit {
   calendars: any[] = [];
   newCalendar = { title: '', external_url: '' };
+  allowedFormats = [ BarcodeFormat.QR_CODE ];
   
+  isSubscribed: boolean = true; // Alapból igaznak vesszük
 
   scannerEnabled = false;
   scanMessage = '';
-  scanStatus = ''; // 'success' vagy 'error'
+  scanStatus = '';
 
   private toastr = inject(ToastrService);
 
@@ -36,10 +40,32 @@ export class Agent implements OnInit {
 
   loadCalendars() {
     this.calendarService.getCalendars().subscribe({
-      next: (data: any) => this.calendars = data,
+      next: (data: any) => {
+        this.calendars = data;
+        this.isSubscribed = true; // Ha visszajött az adat, van előfizetés
+      },
       error: (err) => {
-        console.error('Hiba a naptárak lekérésekor:', err);
-        this.toastr.error('Nem sikerült betölteni a naptárakat.');
+        if (err.status === 402) {
+          this.isSubscribed = false; // 402-es hiba: nincs fizetve!
+        } else {
+          console.error('Hiba a naptárak lekérésekor:', err);
+          this.toastr.error('Nem sikerült betölteni a naptárakat.');
+        }
+      }
+    });
+  }
+
+  startSubscription() {
+    this.toastr.info('Átirányítás a Stripe fizetési oldalára...', 'Kérjük, várjon');
+    
+    this.calendarService.startStripeSubscription().subscribe({
+      next: (res: any) => {
+        // Megkaptuk a linket a Laraveltől, a böngészőt átirányítjuk a Stripe-ra
+        window.location.href = res.url;
+      },
+      error: (err) => {
+        console.error('Stripe hiba:', err);
+        this.toastr.error('Nem sikerült elindítani a fizetést.');
       }
     });
   }
@@ -81,18 +107,15 @@ export class Agent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  // --- SZKENNER LOGIKA ---
-
   toggleScanner() {
     this.scannerEnabled = !this.scannerEnabled;
-    this.scanMessage = ''; // Ha újra bekapcsoljuk, eltüntetjük a régi üzenetet
+    this.scanMessage = '';
   }
 
   onCodeResult(resultString: string) {
     this.scannerEnabled = false; 
     const bookingId = Number(resultString);
 
-    // Biztonsági ellenőrzés: ha a QR kód nem szám, ne küldjünk kérést
     if (isNaN(bookingId)) {
       this.scanStatus = 'error';
       this.scanMessage = 'Érvénytelen QR kód formátum!';
@@ -108,7 +131,6 @@ export class Agent implements OnInit {
       },
       error: (err) => {
         this.scanStatus = 'error';
-        // Lekezeljük a Laravelből jövő hibaüzenetet (vagy egy alapértelmezettet adunk)
         this.scanMessage = err.error?.message || 'Ismeretlen hiba történt a beolvasáskor.';
         this.toastr.error(this.scanMessage);
       }

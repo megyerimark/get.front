@@ -20,7 +20,8 @@ export class Agent implements OnInit {
   newCalendar = { title: '', external_url: '' };
   allowedFormats = [ BarcodeFormat.QR_CODE ];
   
-  isSubscribed: boolean = true; // Alapból igaznak vesszük
+  isSubscribed: boolean = false;
+  isLoading: boolean = true;
 
   scannerEnabled = false;
   scanMessage = '';
@@ -37,12 +38,36 @@ export class Agent implements OnInit {
   ngOnInit() {
     this.loadCalendars();
   }
-
   loadCalendars() {
     this.calendarService.getCalendars().subscribe({
       next: (data: any) => {
+        // Ha TÉNYLEG megkaptuk a naptárakat a Laraveltől, csak akkor engedjük be!
         this.calendars = data;
-        this.isSubscribed = true; // Ha visszajött az adat, van előfizetés
+        this.isSubscribed = true; 
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.isSubscribed = false; // Hiba esetén a fal kint marad
+
+        if (err.status === 402) {
+          // Nincs előfizetés: Ez az ÚJ fiókoknál a normális. Itt nem kell hibaüzenet, csak jön a sárga doboz.
+        } else if (err.status === 403 || err.status === 401) {
+          // E-mail megerősítés hiányzik, vagy lejárt a bejelentkezés!
+          this.toastr.warning('Kérlek, erősítsd meg az e-mail címedet a postafiókodban kapott linkkel!', 'Hitelesítés szükséges');
+        } else {
+          console.error('Szerver hiba:', err);
+          this.toastr.error('Nem sikerült betölteni az adatokat.');
+        }
+      }
+    })}
+
+  /* loadCalendars() {
+    this.calendarService.getCalendars().subscribe({
+      next: (data: any) => {
+        this.calendars = data;
+        this.isSubscribed = true; 
+        this.isLoading = false;
       },
       error: (err) => {
         if (err.status === 402) {
@@ -53,7 +78,7 @@ export class Agent implements OnInit {
         }
       }
     });
-  }
+  } */
 
   startSubscription() {
     this.toastr.info('Átirányítás a Stripe fizetési oldalára...', 'Kérjük, várjon');

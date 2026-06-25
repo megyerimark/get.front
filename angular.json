@@ -31,8 +31,7 @@
             ],
             "styles": [
               "src/styles.scss",
-                "node_modules/ngx-toastr/toastr.css"
-
+              "node_modules/ngx-toastr/toastr.css"
             ]
           },
           "configurations": {
@@ -52,15 +51,25 @@
               "outputHashing": "all"
             },
             "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+  "builder": "@angular/build:dev-server",
+  "options": {
+    "buildTarget": "get-front:build"
+  },
+  "configurations": {
+    "production": {
+      "buildTarget": "get-front:build:production"
+    },
+    "development": {
+      "buildTarget": "get-front:build:development"
+    }
+  },
+  "defaultConfiguration": "development"
+},
           "configurations": {
             "production": {
               "fileReplacements": [
@@ -84,9 +93,6 @@
               "outputHashing": "all"
             },
             "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
             }
           },
           "defaultConfiguration": "development"
@@ -111,8 +117,8 @@
             ],
             "styles": [
               "src/styles.scss",
-               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-               "node_modules/ngx-toastr/toastr.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
@@ -123,4 +129,3 @@
       }
     }
   }
-}

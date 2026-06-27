@@ -1,0 +1,191 @@
+// Színpaletta (Prémium Dark Mode)
+$bg-color: #0b0c10;
+$card-bg: rgba(25, 26, 31, 0.6);
+$text-main: #f8f9fa;
+$text-muted: #8a8d93;
+$accent-color: #d4af37; // Elegáns arany (cserélhető a Getingo kékre is: #17a2b8)
+
+.luxury-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $bg-color;
+  // Opcionális: finom háttérkép vagy minta
+  background-image: radial-gradient(circle at top right, rgba(212, 175, 55, 0.05), transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.05), transparent 40%);
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  padding: 20px;
+}
+
+.luxury-card {
+  width: 100%;
+  max-width: 420px;
+  background: $card-bg;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 50px 40px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  
+  // Kártya megjelenési animáció
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.brand-header {
+  text-align: center;
+  margin-bottom: 40px;
+
+  .logo {
+    color: $text-main;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    color: $accent-color;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin: 0;
+  }
+}
+
+.luxury-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  .form-group {
+    position: relative;
+    width: 100%;
+
+    input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      color: $text-main;
+      font-size: 16px;
+      padding: 10px 0;
+      outline: none;
+      transition: all 0.3s ease;
+
+      // Kijelöléskor eltűnik a placeholder, hogy a label működjön
+      &::placeholder {
+        color: transparent;
+      }
+
+      // Lebegő címke animáció trükk
+      &:focus ~ label,
+      &:not(:placeholder-shown) ~ label {
+        top: -12px;
+        font-size: 12px;
+        color: $accent-color;
+      }
+
+      // Az alsó vonal animációja
+      &:focus ~ .input-line {
+        width: 100%;
+      }
+    }
+
+    label {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      color: $text-muted;
+      font-size: 16px;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .input-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background-color: $accent-color;
+      transition: width 0.4s ease;
+    }
+  }
+
+  .luxury-btn {
+    margin-top: 15px;
+    background: transparent;
+    color: $accent-color;
+    border: 1px solid $accent-color;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    z-index: 1;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      background: $accent-color;
+      z-index: -1;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    &:hover {
+      color: $bg-color;
+      box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+
+      &::before {
+        width: 100%;
+      }
+    }
+  }
+
+  .auth-links {
+    text-align: center;
+    margin-top: 15px;
+    
+    p {
+      color: $text-muted;
+      font-size: 14px;
+    }
+
+    a {
+      color: $text-main;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $accent-color;
+      }
+    }
+  }
+}
+
+// Kulcskockák (Keyframes) az indítási animációhoz
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

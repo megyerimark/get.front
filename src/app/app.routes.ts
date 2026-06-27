@@ -5,10 +5,12 @@ import { Agent } from './components/agent/agent';
 import { Book } from './components/book/book';
 import { VerifyBooking } from './pages/verify-booking/verify-booking';
 import { Register } from './register/register';
+import { Home } from './home/home';
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+  {path: '', redirectTo: '/home' , pathMatch: 'full'}  ,
+    /* { path: '', redirectTo: '/login', pathMatch: 'full' }, */
     { path: 'login', component: Login },
     { path: 'admin', component: Admin },
     { path: 'agent', component: Agent },

@@ -1,4 +1,4 @@
-<div style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #f8f9fa;">
+<!-- <div style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #f8f9fa;">
   
   <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px;">
     
@@ -41,5 +41,44 @@
       <a routerLink="/login" style="color: #17a2b8; text-decoration: none; font-weight: bold;">Jelentkezz be!</a>
     </div>
 
+  </div>
+</div> -->
+<div class="luxury-container">
+  <div class="luxury-card">
+    
+    <div class="brand-header">
+      <h1 class="logo">Getingo</h1>
+      <p class="subtitle">Exkluzív Ingatlanos Hálózat</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="luxury-form">
+      
+      <div class="form-group">
+        <input type="text" id="name" [(ngModel)]="user.name" name="name" required placeholder=" ">
+        <label for="name">Teljes név</label>
+        <div class="input-line"></div>
+      </div>
+
+      <div class="form-group">
+        <input type="email" id="email" [(ngModel)]="user.email" name="email" required placeholder=" ">
+        <label for="email">E-mail cím</label>
+        <div class="input-line"></div>
+      </div>
+
+      <div class="form-group">
+        <input type="password" id="password" [(ngModel)]="user.password" name="password" required placeholder=" ">
+        <label for="password">Jelszó</label>
+        <div class="input-line"></div>
+      </div>
+
+      <button type="submit" class="luxury-btn">
+        <span>Regisztráció</span>
+      </button>
+
+      <div class="auth-links">
+        <p>Már van fiókod? <a routerLink="/login">Jelentkezz be</a></p>
+      </div>
+
+    </form>
   </div>
 </div>

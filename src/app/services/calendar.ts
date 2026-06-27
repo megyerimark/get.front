@@ -1,7 +1,6 @@
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Auth } from './auth';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,11 +11,22 @@ export class Calendar {
   private apiUrl = 'http://127.0.0.1:8000/api';
   
 
-  constructor(private http: HttpClient, private authService: Auth,  private toastr: ToastrService) {}
+  constructor(private http: HttpClient,  private toastr: ToastrService) {}
 
-  private getHeaders(): HttpHeaders {
+ /*  private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     return new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+  } */
+private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      console.warn('Nincs bejelentkezett felhasználó!');
+    }
+    return new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}` 
+    });
   }
 
   getCalendars(): Observable<any> {

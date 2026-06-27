@@ -41,19 +41,19 @@ export class Agent implements OnInit {
   loadCalendars() {
     this.calendarService.getCalendars().subscribe({
       next: (data: any) => {
-        // Ha TÉNYLEG megkaptuk a naptárakat a Laraveltől, csak akkor engedjük be!
+        
         this.calendars = data;
         this.isSubscribed = true; 
         this.isLoading = false;
       },
       error: (err) => {
         this.isLoading = false;
-        this.isSubscribed = false; // Hiba esetén a fal kint marad
+        this.isSubscribed = false; 
 
         if (err.status === 402) {
-          // Nincs előfizetés: Ez az ÚJ fiókoknál a normális. Itt nem kell hibaüzenet, csak jön a sárga doboz.
+        
         } else if (err.status === 403 || err.status === 401) {
-          // E-mail megerősítés hiányzik, vagy lejárt a bejelentkezés!
+          
           this.toastr.warning('Kérlek, erősítsd meg az e-mail címedet a postafiókodban kapott linkkel!', 'Hitelesítés szükséges');
         } else {
           console.error('Szerver hiba:', err);
@@ -85,7 +85,6 @@ export class Agent implements OnInit {
     
     this.calendarService.startStripeSubscription().subscribe({
       next: (res: any) => {
-        // Megkaptuk a linket a Laraveltől, a böngészőt átirányítjuk a Stripe-ra
         window.location.href = res.url;
       },
       error: (err) => {
